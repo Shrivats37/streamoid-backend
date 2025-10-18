@@ -1,5 +1,5 @@
 
-from pydantic import BaseModel, Field, ConfigDict, validator
+from pydantic import BaseModel, Field, ConfigDict, field_validator
 from typing import Optional, List
 from datetime import datetime
 
@@ -16,9 +16,10 @@ class ProductCreate(BaseModel):
     category: Optional[str] = Field(None, max_length=100, description="Product category")
     tags: Optional[str] = Field(None, max_length=500, description="Comma-separated tags")
     
-    @validator('price')
-    def price_must_be_less_than_mrp(cls, v, values):
-        if 'mrp' in values and v > values['mrp']:
+    @field_validator('price')
+    @classmethod
+    def price_must_be_less_than_mrp(cls, v, info):
+        if 'mrp' in info.data and v > info.data['mrp']:
             raise ValueError('Price cannot be greater than MRP')
         return v
 
