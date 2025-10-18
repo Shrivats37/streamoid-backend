@@ -1,0 +1,3 @@
+DATABASE_URL=sqlite:///./products.db
+APP_NAME=Streamoid Product API
+

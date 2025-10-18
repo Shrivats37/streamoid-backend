@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+.env
+*.env
+
+# VS Code / IDE
+.vscode/
+.idea/
+
+# Docker
+postgres_data/
+redis_data/
+*.log
+
+# Byte-compiled / cache
+*.egg-info/
+.eggs/
+*.egg
+.pytest_cache/
+
+# Mac
+.DS_Store
+

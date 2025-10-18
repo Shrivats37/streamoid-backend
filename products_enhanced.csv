@@ -1,0 +1,12 @@
+sku,name,brand,color,size,mrp,price,quantity,description,category,tags
+TSHIRT-RED-001,Classic Cotton T-Shirt,StreamThreads,Red,M,799,499,20,Comfortable 100% cotton t-shirt perfect for everyday wear,Clothing,cotton,comfortable,casual
+TSHIRT-BLK-002,Classic Cotton T-Shirt,StreamThreads,Black,L,799,549,12,Comfortable 100% cotton t-shirt perfect for everyday wear,Clothing,cotton,comfortable,casual
+POLO-GRN-003,Heritage Polo Shirt,StreamThreads,Green,XL,1299,999,8,Premium polo shirt with classic fit and modern style,Clothing,polo,premium,classic
+JEANS-BLU-032,Slim Fit Jeans,DenimWorks,Blue,32,1999,1599,15,Modern slim fit jeans with stretch comfort,Clothing,jeans,slim-fit,denim
+JEANS-BLK-034,Slim Fit Jeans,DenimWorks,Black,34,1999,1599,8,Modern slim fit jeans with stretch comfort,Clothing,jeans,slim-fit,denim
+HOODIE-GRY-001,Premium Hoodie,ComfortWear,Gray,L,2499,1999,5,Soft fleece hoodie with kangaroo pocket,Clothing,hoodie,warm,casual
+SNEAKERS-WHT-001,Classic White Sneakers,ShoeMaster,White,9,2999,2299,12,Timeless white sneakers for everyday comfort,Footwear,sneakers,white,classic
+SNEAKERS-BLK-001,Classic Black Sneakers,ShoeMaster,Black,9,2999,2299,8,Timeless black sneakers for everyday comfort,Footwear,sneakers,black,classic
+WATCH-SLV-001,Digital Smart Watch,TechWear,Silver,One Size,4999,3999,3,Advanced smartwatch with health monitoring,Accessories,watch,smart,digital
+BAG-BLK-001,Leather Messenger Bag,LeatherCraft,Black,One Size,1999,1499,6,Genuine leather messenger bag for professionals,Accessories,bag,leather,messenger
+
