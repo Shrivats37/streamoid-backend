@@ -62,6 +62,7 @@ A comprehensive FastAPI-based product management service that provides advanced 
 - Python 3.11+
 - PostgreSQL (optional, SQLite used by default)
 - Redis (optional, for caching)
+- Git (for version control)
 
 ### Local Development
 
@@ -71,27 +72,57 @@ A comprehensive FastAPI-based product management service that provides advanced 
    cd streamoid-backend
    ```
 
-2. **Create virtual environment**
+2. **Quick Start (Recommended)**
    ```bash
+   ./start.sh
+   ```
+
+3. **Manual Setup**
+   ```bash
+   # Create virtual environment
    python -m venv venv
    source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
-
-3. **Install dependencies**
-   ```bash
+   
+   # Install dependencies
    pip install -r requirements.txt
-   ```
-
-4. **Configure environment**
-   ```bash
+   
+   # Configure environment
    cp env.example .env
    # Edit .env with your configuration
-   ```
-
-5. **Run the application**
-   ```bash
+   
+   # Run the application
    uvicorn app.main:app --reload
    ```
+
+### Git Repository Setup
+
+1. **Initialize Git Repository**
+   ```bash
+   git init
+   git add .
+   git commit -m "Initial commit: Enhanced Streamoid Backend v2.0.0"
+   ```
+
+2. **Add Remote Repository**
+   ```bash
+   git remote add origin https://github.com/yourusername/streamoid-backend.git
+   git push -u origin main
+   ```
+
+3. **Auto-Update Script**
+   ```bash
+   # Make executable
+   chmod +x auto-update.sh
+   
+   # Run auto-update
+   ./auto-update.sh
+   ```
+
+4. **GitHub Actions CI/CD**
+   - Automatic testing on push/PR
+   - Docker build verification
+   - Security scanning
+   - Code quality checks
 
 ### Docker Development
 
@@ -151,6 +182,9 @@ curl -X POST "http://localhost:8000/api/v1/products" \
 
 ```
 streamoid-backend/
+├── .github/
+│   └── workflows/
+│       └── ci.yml              # GitHub Actions CI/CD
 ├── app/
 │   ├── __init__.py
 │   ├── main.py                 # FastAPI application
@@ -168,11 +202,19 @@ streamoid-backend/
 │       └── error_handler.py    # Error handling middleware
 ├── tests/
 │   ├── __init__.py
-│   └── test_upload.py          # Test cases
+│   ├── test_upload.py          # Original test cases
+│   └── test_enhanced_functionality.py # Comprehensive tests
 ├── docker-compose.yml          # Docker Compose configuration
 ├── Dockerfile                  # Docker configuration
 ├── requirements.txt            # Python dependencies
 ├── env.example                 # Environment configuration template
+├── .gitignore                  # Git ignore rules
+├── auto-update.sh              # Auto-update script
+├── start.sh                    # Easy startup script
+├── PROJECT_SUMMARY.md          # Detailed project summary
+├── PROJECT_STATUS.json         # Project status tracking
+├── GIT_SETUP.md               # Git setup instructions
+├── products_enhanced.csv       # Sample data file
 └── README.md                   # This file
 ```
 
@@ -245,4 +287,5 @@ For support and questions:
 ---
 
 **Streamoid Backend v2.0.0** - Enhanced Product Management API
+
 

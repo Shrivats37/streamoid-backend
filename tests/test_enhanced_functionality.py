@@ -225,3 +225,4 @@ def test_duplicate_sku_error(setup_database, sample_product_data):
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
 
+

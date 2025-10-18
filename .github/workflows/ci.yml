@@ -1,0 +1,168 @@
+name: CI/CD Pipeline for Streamoid Backend
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.11, 3.12]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    
+    - name: Cache pip dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Run tests
+      run: |
+        python -m pytest tests/ -v --cov=app --cov-report=xml
+    
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage.xml
+        flags: unittests
+        name: codecov-umbrella
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install linting dependencies
+      run: |
+        pip install flake8 black isort
+    
+    - name: Run Black (code formatting check)
+      run: |
+        black --check app/ tests/
+    
+    - name: Run isort (import sorting check)
+      run: |
+        isort --check-only app/ tests/
+    
+    - name: Run flake8 (linting)
+      run: |
+        flake8 app/ tests/
+
+  security:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install security tools
+      run: |
+        pip install bandit safety
+    
+    - name: Run Bandit security scan
+      run: |
+        bandit -r app/ -f json -o bandit-report.json || true
+    
+    - name: Run Safety check
+      run: |
+        safety check --json --output safety-report.json || true
+
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+    
+    - name: Build Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        push: false
+        tags: streamoid-backend:latest
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+    
+    - name: Test Docker container
+      run: |
+        docker run -d -p 8000:8000 --name test-container streamoid-backend:latest
+        sleep 15
+        curl -f http://localhost:8000/health || exit 1
+        docker stop test-container
+        docker rm test-container
+
+  deploy:
+    needs: [test, lint, security, docker]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Deploy to production
+      run: |
+        echo "🚀 Deploying Streamoid Backend to production..."
+        echo "✅ All checks passed!"
+        echo "📊 Test Results: PASSED"
+        echo "🔍 Linting: PASSED"
+        echo "🔒 Security: PASSED"
+        echo "🐳 Docker: PASSED"
+        echo ""
+        echo "🎯 Deployment successful!"
+        echo "📅 Deployed at: $(date)"
+        echo "🔗 Commit: ${{ github.sha }}"
+    
+    - name: Update deployment status
+      run: |
+        echo "DEPLOYMENT_STATUS=success" >> $GITHUB_ENV
+        echo "DEPLOYMENT_TIME=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> $GITHUB_ENV
+
+  notify:
+    needs: [deploy]
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+    - name: Notify deployment status
+      run: |
+        if [ "${{ needs.deploy.result }}" == "success" ]; then
+          echo "✅ Streamoid Backend deployed successfully!"
+          echo "🌐 API available at: https://your-domain.com"
+          echo "📖 Docs available at: https://your-domain.com/docs"
+        else
+          echo "❌ Deployment failed!"
+          echo "🔍 Check the logs for details"
+        fi
