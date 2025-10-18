@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, Query, HTTPException, status
 from sqlalchemy.orm import Session
 from sqlalchemy import func, and_, or_
 from typing import List, Optional, Dict, Any
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from ..database import get_db
 from ..models import Product
 import logging
@@ -47,7 +47,7 @@ def get_analytics_overview(db: Session = Depends(get_db)):
         ).scalar()
         
         # Recent activity (last 30 days)
-        thirty_days_ago = datetime.now(datetime.timezone.utc) - timedelta(days=30)
+        thirty_days_ago = datetime.now(timezone.utc) - timedelta(days=30)
         recent_products = db.query(Product).filter(
             and_(Product.is_active == True, Product.created_at >= thirty_days_ago)
         ).count()
@@ -233,7 +233,7 @@ def get_trends_analytics(
     Get trends analytics for the specified period.
     """
     try:
-        end_date = datetime.now(datetime.timezone.utc)
+        end_date = datetime.now(timezone.utc)
         start_date = end_date - timedelta(days=days)
         
         # Products created in the period
